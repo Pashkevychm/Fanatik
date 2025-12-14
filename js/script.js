@@ -52,7 +52,7 @@ let products = [
     }
 ];
 
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 let productsContainer = document.querySelector('.products-div');
 let btnGroup = document.querySelector('.btn-group');
