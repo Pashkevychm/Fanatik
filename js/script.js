@@ -66,12 +66,12 @@ function renderProducts(items) {
 
     items.forEach(function(item) {
         let productHTML = `
-            <article class="product">
+            <article class="product" data-id=${item.id}>
                 <img src="${item.image}" alt="" class="product-img">
                 <h3 class="product-title">${item.name}</h3>
                 <p class="product-description">${item.description}</p>
                 <p class="product-price"><strong>${item.price} грн</strong></p>
-                <button type="button" class="btn btn-primary">До кошику</button>
+                <button type="button" class="btn btn-primary add-to-cart-btn">До кошику</button>
             </article>
         `
         productsContainer.innerHTML += productHTML
@@ -87,14 +87,16 @@ renderProducts(products)
     }
 }
 
-function addToCart(productld) {
-    let product = products.find(p => p.id == productld);
-    if (product) {
-        cart.push(product);
-        alert("Товар додано" + product.name)
-    }
+function addToCart(productId) {
+    let cartProduct = cart.find(p => p.id == productId);
+    if (cartProduct) {
+        cartProduct.quantity += 1;
+    } else {
+        let product = products.find(p => p.id == productId);
+        cart.push({...product, quantity: 1});
+    }        
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
-
 let productsMap = {
     "Всі": "all",
     "Телефони": "phone",
@@ -109,14 +111,13 @@ function setupFilterButtons() {
 
         })
     }
-    productsContainer.addEventListener("click", function(event){
-        if (event.target.classlist.contains('add-to-cart-btn')){
-            let productCard = event.target.closest('.product');
-            let productId = parseInt(productCard.dataset.id)
-            addToCart(productId)
-        } 
-    })
 }
-
+productsContainer.addEventListener("click", function(event) {
+    if (event.target.classList.contains('add-to-cart-btn')) {
+        let productCart = event.target.closest ('.product');
+        let productld = parseInt(productCart.dataset.id)
+        addToCart(productld)
+    }
+})
 renderProducts(products)
 setupFilterButtons()

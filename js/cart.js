@@ -12,7 +12,7 @@ function renderCart() {
         return;
 
     }
-}
+
 cart.forEach(function(item) {
     let html = `
             <div class="cart-product" data-id="${item.id}">
@@ -37,16 +37,17 @@ cart.forEach(function(item) {
 
 });
     totalElement.innerText = `${calculateTotal()} грн`;
+}
 
-
-function calculateTotal() {
-    let total = 0;
+function calculateTotal(){
+    let total = 0; 
     for (let item of cart) {
         total += item.price * item.quantity
 
     }
     return total
 }
+
 renderCart();
 
 cartContainer.addEventListener('click', function(event) {
@@ -70,10 +71,11 @@ cartContainer.addEventListener('input', function(event) {
         let item = cart.find(item => item.id == id);
         if (item && newQuantity > 0 ) {
             item.quantity = newQuantity;
-            // renderCart();
+           // renderCart();
+
 
             localStorage.setItem('cart', JSON.stringify(cart));
-            totalElement.innerHTML = `${calculateTotal()} грн`;
+            totalElement.innerText = `${calculateTotal()} грн`;
             parent.querySelector('.total-box').innerText = `${item.price * item.quantity} грн`;
         }
     }
